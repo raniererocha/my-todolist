@@ -4,21 +4,37 @@ const send = document.getElementById("send")
 const list = document.getElementById("list")
 
 const memory = JSON.parse(localStorage.getItem('todo'))
-const data = [...memory];
+const data = [];
 
-    const createTodoItem = (data) => {
-        if (title.value === "") {
-            throw new Error("Campo de título está vazio!")
+    const createTodoItem = (data, memory) => {
+        if (memory === null) {
+            if (title.value === "") {
+                throw new Error("Campo de título está vazio!")
+            }
+            let todoItem = {
+                title : title.value,
+                resume: resume.value,
+                isComplete: false
+            }
+            data.push(todoItem)
+            localStorage.setItem('todo', JSON.stringify(data))
+            
+            return data
+        } else {
+            data = memory
+            if (title.value === "") {
+                throw new Error("Campo de título está vazio!")
+            }
+            let todoItem = {
+                title : title.value,
+                resume: resume.value,
+                isComplete: false
+            }
+            data.push(todoItem)
+            localStorage.setItem('todo', JSON.stringify(data))
+            
+            return data
         }
-        let todoItem = {
-            title : title.value,
-            resume: resume.value,
-            isComplete: false
-        }
-        
-        data.push(todoItem)
-        localStorage.setItem('todo', JSON.stringify(data))
-        return data
     }
 
     
@@ -52,11 +68,11 @@ const data = [...memory];
         resume.value = ''
     }
 
-    render(data)
+    render(memory)
 
     send.addEventListener("click", () => {
         try {
-            render(createTodoItem(data))
+            render(createTodoItem(data, memory))
         } catch (error) {
            console.log(error)
         }
